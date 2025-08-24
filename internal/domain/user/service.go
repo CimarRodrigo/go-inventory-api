@@ -3,21 +3,22 @@ package user
 import (
 	"errors"
 	"regexp"
+
+	"github.com/CimarRodrigo/go-inventory-api/internal/domain/shared"
+	"github.com/google/uuid"
 )
 
 type Service struct {
-	repo Repository
 }
 
-func NewService(r Repository) *Service {
-	return &Service{repo: r}
+func NewService() *Service {
+	return &Service{}
 }
 
 func (s *Service) ValidateEmail(email string) error {
 	if email == "" {
 		return errors.New("email is required")
 	}
-
 	re := regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$`)
 	if !re.MatchString(email) {
 		return errors.New("invalid email format")
@@ -50,12 +51,14 @@ func (s *Service) ValidatePassword(password string) error {
 	return nil
 }
 
-func (s *Service) IsEmailUnique(email string) (bool, error) {
-	existing, err := s.repo.GetByEmail(email)
-
-	if err != nil {
-		return false, nil
+func (s *Service) CreateUser(email string, password string, name string, status shared.Status) (*User, error) {
+	newUser := &User{
+		ID:       uuid.New(),
+		Email:    email,
+		Name:     name,
+		Password: password,
+		Status:   status,
 	}
 
-	return existing == nil, nil
+	return newUser, nil
 }
