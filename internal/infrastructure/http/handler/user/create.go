@@ -1,16 +1,16 @@
-package user
+package userhandler
 
 import (
-	"github.com/CimarRodrigo/go-inventory-api/internal/application/user/usecase"
+	userusecase "github.com/CimarRodrigo/go-inventory-api/internal/application/user/usecase"
 	userdto "github.com/CimarRodrigo/go-inventory-api/internal/infrastructure/http/dto/user"
 	"github.com/gin-gonic/gin"
 )
 
 type CreateHandler struct {
-	Usecase *usecase.CreateUseCase
+	Usecase *userusecase.CreateUseCase
 }
 
-func NewHandler(usecase *usecase.CreateUseCase) *CreateHandler {
+func NewHandler(usecase *userusecase.CreateUseCase) *CreateHandler {
 	return &CreateHandler{
 		Usecase: usecase,
 	}

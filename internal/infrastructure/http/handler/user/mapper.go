@@ -1,4 +1,4 @@
-package user
+package userhandler
 
 import (
 	userio "github.com/CimarRodrigo/go-inventory-api/internal/application/user/io"

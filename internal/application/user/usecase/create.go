@@ -1,7 +1,7 @@
-package usecase
+package userusecase
 
 import (
-	"github.com/CimarRodrigo/go-inventory-api/internal/application/user/io"
+	userio "github.com/CimarRodrigo/go-inventory-api/internal/application/user/io"
 	"github.com/CimarRodrigo/go-inventory-api/internal/domain/shared"
 	"github.com/CimarRodrigo/go-inventory-api/internal/domain/user"
 )
@@ -20,7 +20,7 @@ func NewCreateUseCase(userService *user.Service, userRepo user.Repository, passw
 	}
 }
 
-func (uc *CreateUseCase) Create(req *io.CreateInput) (*io.CreateOutput, error) {
+func (uc *CreateUseCase) Create(req *userio.CreateInput) (*userio.CreateOutput, error) {
 
 	if err := uc.userService.ValidateEmail(req.Email); err != nil {
 		return nil, err
@@ -45,7 +45,7 @@ func (uc *CreateUseCase) Create(req *io.CreateInput) (*io.CreateOutput, error) {
 		return nil, err
 	}
 
-	response := &io.CreateOutput{
+	response := &userio.CreateOutput{
 		Email: createdUser.Email,
 		Name:  createdUser.Name,
 	}

@@ -1,4 +1,4 @@
-package io
+package userio
 
 type CreateInput struct {
 	Email    string
