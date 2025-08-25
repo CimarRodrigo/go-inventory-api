@@ -31,9 +31,13 @@ func (h *ListHandler) GetByID(c *gin.Context) {
 	}
 
 	c.JSON(200, &userdto.ListOneResponse{
-		ID:    user.ID,
-		Email: user.Email,
-		Name:  user.Name,
+		ID:            user.ID,
+		Email:         user.Email,
+		Name:          user.Name,
+		CreatedDate:   user.CreatedDate,
+		UpdatedDate:   user.UpdatedDate,
+		LastLoginDate: user.LastLoginDate,
+		Status:        string(user.Status),
 	})
 }
 
@@ -47,9 +51,13 @@ func (h *ListHandler) GetAll(c *gin.Context) {
 	var response []*userdto.ListOneResponse
 	for _, user := range users {
 		response = append(response, &userdto.ListOneResponse{
-			ID:    user.ID,
-			Email: user.Email,
-			Name:  user.Name,
+			ID:            user.ID,
+			Email:         user.Email,
+			Name:          user.Name,
+			CreatedDate:   user.CreatedDate,
+			UpdatedDate:   user.UpdatedDate,
+			LastLoginDate: user.LastLoginDate,
+			Status:        string(user.Status),
 		})
 	}
 
