@@ -22,7 +22,7 @@ func (h *CreateHandler) Create(c *gin.Context) {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	input := ToInput(&req)
+	input := ToCreateInput(&req)
 
 	user, err := h.Usecase.Create(input)
 	if err != nil {
