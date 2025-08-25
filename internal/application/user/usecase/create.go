@@ -3,16 +3,16 @@ package userusecase
 import (
 	userio "github.com/CimarRodrigo/go-inventory-api/internal/application/user/io"
 	"github.com/CimarRodrigo/go-inventory-api/internal/domain/shared"
-	"github.com/CimarRodrigo/go-inventory-api/internal/domain/user"
+	userdomain "github.com/CimarRodrigo/go-inventory-api/internal/domain/user"
 )
 
 type CreateUseCase struct {
-	userService    *user.Service
-	userRepo       user.Repository
+	userService    *userdomain.Service
+	userRepo       userdomain.Repository
 	passwordHasher shared.PasswordHasher
 }
 
-func NewCreateUseCase(userService *user.Service, userRepo user.Repository, passwordHasher shared.PasswordHasher) *CreateUseCase {
+func NewCreateUseCase(userService *userdomain.Service, userRepo userdomain.Repository, passwordHasher shared.PasswordHasher) *CreateUseCase {
 	return &CreateUseCase{
 		userService:    userService,
 		userRepo:       userRepo,

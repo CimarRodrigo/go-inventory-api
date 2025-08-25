@@ -1,7 +1,7 @@
 package usergorm
 
 import (
-	"github.com/CimarRodrigo/go-inventory-api/internal/domain/user"
+	userdomain "github.com/CimarRodrigo/go-inventory-api/internal/domain/user"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -16,7 +16,7 @@ func NewRepository(db *gorm.DB) *Repository {
 	}
 }
 
-func (repo *Repository) Create(user *user.User) (*user.User, error) {
+func (repo *Repository) Create(user *userdomain.User) (*userdomain.User, error) {
 
 	var newUser = FromDomain(user)
 
@@ -26,10 +26,18 @@ func (repo *Repository) Create(user *user.User) (*user.User, error) {
 	return ToDomain(newUser), nil
 }
 
-func (repo *Repository) GetByID(id uuid.UUID) (*user.User, error) {
+func (repo *Repository) GetByID(id uuid.UUID) (*userdomain.User, error) {
 	var user User
 	if err := repo.db.First(&user, id).Error; err != nil {
 		return nil, err
 	}
 	return ToDomain(&user), nil
+}
+
+func (repo *Repository) GetAll() ([]*userdomain.User, error) {
+	var users []User
+	if err := repo.db.Find(&users).Error; err != nil {
+		return nil, err
+	}
+	return ToDomainList(users), nil
 }

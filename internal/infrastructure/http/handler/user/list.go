@@ -36,3 +36,22 @@ func (h *ListHandler) GetByID(c *gin.Context) {
 		Name:  user.Name,
 	})
 }
+
+func (h *ListHandler) GetAll(c *gin.Context) {
+	users, err := h.Usecase.GetAll()
+	if err != nil {
+		c.JSON(404, gin.H{"error": err.Error()})
+		return
+	}
+
+	var response []*userdto.ListOneResponse
+	for _, user := range users {
+		response = append(response, &userdto.ListOneResponse{
+			ID:    user.ID,
+			Email: user.Email,
+			Name:  user.Name,
+		})
+	}
+
+	c.JSON(200, response)
+}

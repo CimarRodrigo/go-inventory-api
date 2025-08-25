@@ -1,10 +1,10 @@
 package router
 
 import (
-	appuser "github.com/CimarRodrigo/go-inventory-api/internal/application/user/usecase"
-	domainuser "github.com/CimarRodrigo/go-inventory-api/internal/domain/user"
-	handleruser "github.com/CimarRodrigo/go-inventory-api/internal/infrastructure/http/handler/user"
-	gormuser "github.com/CimarRodrigo/go-inventory-api/internal/infrastructure/persistence/gorm/user"
+	userusecase "github.com/CimarRodrigo/go-inventory-api/internal/application/user/usecase"
+	userdomain "github.com/CimarRodrigo/go-inventory-api/internal/domain/user"
+	userhandler "github.com/CimarRodrigo/go-inventory-api/internal/infrastructure/http/handler/user"
+	usergorm "github.com/CimarRodrigo/go-inventory-api/internal/infrastructure/persistence/gorm/user"
 	"github.com/CimarRodrigo/go-inventory-api/internal/infrastructure/security/bcrypt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -16,22 +16,23 @@ func SetupUserRoutes(r *gin.RouterGroup, db *gorm.DB) {
 	hasher := bcrypt.NewBcryptHasher()
 
 	// repository
-	userRepo := gormuser.NewRepository(db)
+	userRepo := usergorm.NewRepository(db)
 
 	// service
-	userService := domainuser.NewService()
+	userService := userdomain.NewService()
 
 	// usecase
-	userCreateUsecase := appuser.NewCreateUseCase(userService, userRepo, hasher)
-	userListUsecase := appuser.NewListUseCase(userRepo)
+	userCreateUsecase := userusecase.NewCreateUseCase(userService, userRepo, hasher)
+	userListUsecase := userusecase.NewListUseCase(userRepo)
 
 	// handler
-	userCreateHandler := handleruser.NewHandler(userCreateUsecase)
-	userListHandler := handleruser.NewListHandler(userListUsecase)
+	userCreateHandler := userhandler.NewHandler(userCreateUsecase)
+	userListHandler := userhandler.NewListHandler(userListUsecase)
 
 	rg := r.Group("/users")
 	{
 		rg.POST("/", userCreateHandler.Create)
 		rg.GET("/:id", userListHandler.GetByID)
+		rg.GET("/", userListHandler.GetAll)
 	}
 }

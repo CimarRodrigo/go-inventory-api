@@ -2,15 +2,15 @@ package userusecase
 
 import (
 	userio "github.com/CimarRodrigo/go-inventory-api/internal/application/user/io"
-	"github.com/CimarRodrigo/go-inventory-api/internal/domain/user"
+	userdomain "github.com/CimarRodrigo/go-inventory-api/internal/domain/user"
 	"github.com/google/uuid"
 )
 
 type ListUseCase struct {
-	userRepo user.Repository
+	userRepo userdomain.Repository
 }
 
-func NewListUseCase(userRepo user.Repository) *ListUseCase {
+func NewListUseCase(userRepo userdomain.Repository) *ListUseCase {
 	return &ListUseCase{
 		userRepo: userRepo,
 	}
@@ -27,4 +27,22 @@ func (uc *ListUseCase) GetByID(id uuid.UUID) (*userio.ListOneOutput, error) {
 		Email: user.Email,
 		Name:  user.Name,
 	}, nil
+}
+
+func (uc *ListUseCase) GetAll() ([]*userio.ListOneOutput, error) {
+	users, err := uc.userRepo.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	var result []*userio.ListOneOutput
+	for _, user := range users {
+		result = append(result, &userio.ListOneOutput{
+			ID:    user.ID,
+			Email: user.Email,
+			Name:  user.Name,
+		})
+	}
+
+	return result, nil
 }

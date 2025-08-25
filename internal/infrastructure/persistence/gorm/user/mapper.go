@@ -24,3 +24,11 @@ func ToDomain(user *User) *domainuser.User {
 		Status:   shared.Status(user.Status),
 	}
 }
+
+func ToDomainList(users []User) []*domainuser.User {
+	var result []*domainuser.User
+	for _, user := range users {
+		result = append(result, ToDomain(&user))
+	}
+	return result
+}
