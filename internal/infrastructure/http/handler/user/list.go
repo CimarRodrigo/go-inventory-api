@@ -1,6 +1,8 @@
 package userhandler
 
 import (
+	"net/http"
+
 	userusecase "github.com/CimarRodrigo/go-inventory-api/internal/application/user/usecase"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -20,24 +22,24 @@ func (h *ListHandler) GetByID(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := uuid.Parse(idParam)
 	if err != nil {
-		c.JSON(400, gin.H{"error": "invalid UUID"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid user ID"})
 		return
 	}
 	user, err := h.Usecase.GetByID(id)
 	if err != nil {
-		c.JSON(404, gin.H{"error": err.Error()})
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(200, ToListOneResponse(user))
+	c.JSON(http.StatusOK, ToListOneResponse(user))
 }
 
 func (h *ListHandler) GetAll(c *gin.Context) {
 	users, err := h.Usecase.GetAll()
 	if err != nil {
-		c.JSON(404, gin.H{"error": err.Error()})
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(200, ToListOneResponseList(users))
+	c.JSON(http.StatusOK, ToListOneResponseList(users))
 }

@@ -7,4 +7,5 @@ type Repository interface {
 	GetByID(id uuid.UUID) (*User, error)
 	GetAll() ([]*User, error)
 	Update(user *User, id uuid.UUID) error
+	Delete(id uuid.UUID) error
 }

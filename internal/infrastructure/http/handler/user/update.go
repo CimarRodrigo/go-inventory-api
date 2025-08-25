@@ -1,6 +1,8 @@
 package userhandler
 
 import (
+	"net/http"
+
 	userusecase "github.com/CimarRodrigo/go-inventory-api/internal/application/user/usecase"
 	userdto "github.com/CimarRodrigo/go-inventory-api/internal/infrastructure/http/dto/user"
 	"github.com/gin-gonic/gin"
@@ -20,7 +22,7 @@ func NewUpdateHandler(usecase *userusecase.UpdateUsecase) *UpdateHandler {
 func (h *UpdateHandler) Update(c *gin.Context) {
 	var req userdto.UpdateRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -29,13 +31,13 @@ func (h *UpdateHandler) Update(c *gin.Context) {
 
 	input := ToUpdateInput(&req)
 	if err != nil {
-		c.JSON(400, gin.H{"error": "invalid user ID"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid user ID"})
 		return
 	}
 	if err := h.Usecase.UpdateInfo(input, id); err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(200, gin.H{"message": "User updated successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
 }

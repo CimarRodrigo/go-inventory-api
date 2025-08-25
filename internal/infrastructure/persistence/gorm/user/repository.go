@@ -64,3 +64,12 @@ func (repo *Repository) Update(user *userdomain.User, id uuid.UUID) error {
 
 	return repo.db.Save(&existingUser).Error
 }
+
+func (repo *Repository) Delete(id uuid.UUID) error {
+	var user User
+	if err := repo.db.First(&user, id).Error; err != nil {
+		return errors.New("user not found")
+	}
+
+	return repo.db.Delete(&user).Error
+}
