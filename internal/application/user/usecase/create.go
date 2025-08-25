@@ -7,14 +7,16 @@ import (
 )
 
 type CreateUseCase struct {
-	userService *user.Service
-	userRepo    user.Repository
+	userService    *user.Service
+	userRepo       user.Repository
+	passwordHasher shared.PasswordHasher
 }
 
-func NewCreateUseCase(userService *user.Service, userRepo user.Repository) *CreateUseCase {
+func NewCreateUseCase(userService *user.Service, userRepo user.Repository, passwordHasher shared.PasswordHasher) *CreateUseCase {
 	return &CreateUseCase{
-		userService: userService,
-		userRepo:    userRepo,
+		userService:    userService,
+		userRepo:       userRepo,
+		passwordHasher: passwordHasher,
 	}
 }
 
@@ -28,7 +30,12 @@ func (uc *CreateUseCase) Create(req *io.CreateInput) (*io.CreateOutput, error) {
 		return nil, err
 	}
 
-	newUser, err := uc.userService.CreateUser(req.Email, req.Password, req.Name, shared.Active)
+	hashedPassword, err := uc.passwordHasher.Hash(req.Password)
+	if err != nil {
+		return nil, err
+	}
+
+	newUser, err := uc.userService.CreateUser(req.Email, hashedPassword, req.Name, shared.Active)
 	if err != nil {
 		return nil, err
 	}

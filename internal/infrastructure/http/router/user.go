@@ -5,11 +5,16 @@ import (
 	domainuser "github.com/CimarRodrigo/go-inventory-api/internal/domain/user"
 	handleruser "github.com/CimarRodrigo/go-inventory-api/internal/infrastructure/http/handler/user"
 	gormuser "github.com/CimarRodrigo/go-inventory-api/internal/infrastructure/persistence/gorm/user"
+	"github.com/CimarRodrigo/go-inventory-api/internal/infrastructure/security/bcrypt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 func SetupUserRoutes(r *gin.RouterGroup, db *gorm.DB) {
+
+	// deps
+	hasher := bcrypt.NewBcryptHasher()
+
 	// repository
 	userRepo := gormuser.NewRepository(db)
 
@@ -17,7 +22,7 @@ func SetupUserRoutes(r *gin.RouterGroup, db *gorm.DB) {
 	userService := domainuser.NewService()
 
 	// usecase
-	userUsecase := appuser.NewCreateUseCase(userService, userRepo)
+	userUsecase := appuser.NewCreateUseCase(userService, userRepo, hasher)
 
 	// handler
 	userHandler := handleruser.NewHandler(userUsecase)

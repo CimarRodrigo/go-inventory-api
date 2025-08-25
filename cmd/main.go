@@ -11,18 +11,18 @@ import (
 
 func main() {
 
-	//Initial config
+	// Initial config
 	cfg := config.LoadConfig()
 	gin.SetMode(cfg.Server.Mode)
 	r := gin.Default()
 
-	//Database
+	// Database
 	db := gorm.InitDB(cfg.Database)
 
-	//Router
-	router.SetupRoutes(r, cfg, db)
+	// Router
+	router.Bootstrap(r, cfg, db)
 
-	//Init server
+	// Init server
 	port := ":" + cfg.Server.Port
 	log.Println("Starting server on", port)
 	if err := r.Run(port); err != nil {

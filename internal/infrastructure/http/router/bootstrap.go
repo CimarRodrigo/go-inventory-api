@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func SetupRoutes(r *gin.Engine, cfg *config.Config, db *gorm.DB) {
+func Bootstrap(r *gin.Engine, cfg *config.Config, db *gorm.DB) {
 
 	// routes
 	v1 := r.Group("/api/v1")
