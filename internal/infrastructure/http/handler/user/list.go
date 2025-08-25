@@ -2,7 +2,6 @@ package userhandler
 
 import (
 	userusecase "github.com/CimarRodrigo/go-inventory-api/internal/application/user/usecase"
-	userdto "github.com/CimarRodrigo/go-inventory-api/internal/infrastructure/http/dto/user"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -30,15 +29,7 @@ func (h *ListHandler) GetByID(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, &userdto.ListOneResponse{
-		ID:            user.ID,
-		Email:         user.Email,
-		Name:          user.Name,
-		CreatedDate:   user.CreatedDate,
-		UpdatedDate:   user.UpdatedDate,
-		LastLoginDate: user.LastLoginDate,
-		Status:        string(user.Status),
-	})
+	c.JSON(200, ToListOneResponse(user))
 }
 
 func (h *ListHandler) GetAll(c *gin.Context) {
@@ -48,18 +39,5 @@ func (h *ListHandler) GetAll(c *gin.Context) {
 		return
 	}
 
-	var response []*userdto.ListOneResponse
-	for _, user := range users {
-		response = append(response, &userdto.ListOneResponse{
-			ID:            user.ID,
-			Email:         user.Email,
-			Name:          user.Name,
-			CreatedDate:   user.CreatedDate,
-			UpdatedDate:   user.UpdatedDate,
-			LastLoginDate: user.LastLoginDate,
-			Status:        string(user.Status),
-		})
-	}
-
-	c.JSON(200, response)
+	c.JSON(200, ToListOneResponseList(users))
 }
