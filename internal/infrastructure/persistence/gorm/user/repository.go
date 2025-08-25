@@ -1,6 +1,8 @@
 package usergorm
 
 import (
+	"errors"
+
 	userdomain "github.com/CimarRodrigo/go-inventory-api/internal/domain/user"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -40,4 +42,25 @@ func (repo *Repository) GetAll() ([]*userdomain.User, error) {
 		return nil, err
 	}
 	return ToDomainList(users), nil
+}
+
+func (repo *Repository) Update(user *userdomain.User, id uuid.UUID) error {
+	var existingUser User
+	if err := repo.db.First(&existingUser, id).Error; err != nil {
+		return errors.New("user not found")
+	}
+
+	if user.Password != "" {
+		existingUser.Password = user.Password
+	}
+
+	if user.Email != "" {
+		existingUser.Email = user.Email
+	}
+
+	if user.Name != "" {
+		existingUser.Name = user.Name
+	}
+
+	return repo.db.Save(&existingUser).Error
 }

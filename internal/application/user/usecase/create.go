@@ -1,6 +1,8 @@
 package userusecase
 
 import (
+	"log"
+
 	userio "github.com/CimarRodrigo/go-inventory-api/internal/application/user/io"
 	"github.com/CimarRodrigo/go-inventory-api/internal/domain/shared"
 	userdomain "github.com/CimarRodrigo/go-inventory-api/internal/domain/user"
@@ -21,27 +23,31 @@ func NewCreateUseCase(userService *userdomain.Service, userRepo userdomain.Repos
 }
 
 func (uc *CreateUseCase) Create(req *userio.CreateInput) (*userio.CreateOutput, error) {
-
 	if err := uc.userService.ValidateEmail(req.Email); err != nil {
+		log.Printf("Failed to validate email %s: %v", req.Email, err)
 		return nil, err
 	}
 
 	if err := uc.userService.ValidatePassword(req.Password); err != nil {
+		log.Printf("Failed to validate password: %v", err)
 		return nil, err
 	}
 
 	hashedPassword, err := uc.passwordHasher.Hash(req.Password)
 	if err != nil {
+		log.Printf("Failed to hash password: %v", err)
 		return nil, err
 	}
 
 	newUser, err := uc.userService.CreateUser(req.Email, hashedPassword, req.Name, shared.Active)
 	if err != nil {
+		log.Printf("Failed to create user: %v", err)
 		return nil, err
 	}
 
 	createdUser, err := uc.userRepo.Create(newUser)
 	if err != nil {
+		log.Printf("Failed to persist user: %v", err)
 		return nil, err
 	}
 
@@ -49,6 +55,8 @@ func (uc *CreateUseCase) Create(req *userio.CreateInput) (*userio.CreateOutput, 
 		Email: createdUser.Email,
 		Name:  createdUser.Name,
 	}
+
+	log.Printf("User created: %v", response)
 
 	return response, nil
 

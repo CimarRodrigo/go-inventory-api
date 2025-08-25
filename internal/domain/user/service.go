@@ -3,6 +3,7 @@ package userdomain
 import (
 	"errors"
 	"regexp"
+	"time"
 
 	"github.com/CimarRodrigo/go-inventory-api/internal/domain/shared"
 	"github.com/google/uuid"
@@ -61,4 +62,16 @@ func (s *Service) CreateUser(email string, password string, name string, status 
 	}
 
 	return newUser, nil
+}
+
+func (s *Service) UpdateLastLogin(user *User) {
+	user.LastLoginDate = time.Now()
+}
+
+func (s *Service) UpdateUser(email string, password string, name string) (*User, error) {
+	return &User{
+		Email:    email,
+		Name:     name,
+		Password: password,
+	}, nil
 }

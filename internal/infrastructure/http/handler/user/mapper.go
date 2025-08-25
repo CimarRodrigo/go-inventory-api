@@ -13,6 +13,14 @@ func ToCreateInput(req *userdto.CreateRequest) *userio.CreateInput {
 	}
 }
 
+func ToUpdateInput(req *userdto.UpdateRequest) *userio.UpdateInput {
+	return &userio.UpdateInput{
+		Email:    req.Email,
+		Name:     req.Name,
+		Password: req.Password,
+	}
+}
+
 func ToListOneResponse(user *userio.ListOneOutput) *userdto.ListOneResponse {
 	return &userdto.ListOneResponse{
 		ID:            user.ID,

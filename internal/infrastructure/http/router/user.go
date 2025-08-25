@@ -24,15 +24,18 @@ func SetupUserRoutes(r *gin.RouterGroup, db *gorm.DB) {
 	// usecase
 	userCreateUsecase := userusecase.NewCreateUseCase(userService, userRepo, hasher)
 	userListUsecase := userusecase.NewListUseCase(userRepo)
+	userUpdateUsecase := userusecase.NewUpdateUsecase(userRepo, hasher, userService)
 
 	// handler
 	userCreateHandler := userhandler.NewHandler(userCreateUsecase)
 	userListHandler := userhandler.NewListHandler(userListUsecase)
+	userUpdateHandler := userhandler.NewUpdateHandler(userUpdateUsecase)
 
 	rg := r.Group("/users")
 	{
 		rg.POST("/", userCreateHandler.Create)
 		rg.GET("/:id", userListHandler.GetByID)
 		rg.GET("/", userListHandler.GetAll)
+		rg.PATCH("/:id", userUpdateHandler.Update)
 	}
 }
