@@ -22,15 +22,7 @@ func (uc *ListUseCase) GetByID(id uuid.UUID) (*userio.ListOneOutput, error) {
 		return nil, err
 	}
 
-	return &userio.ListOneOutput{
-		ID:            user.ID,
-		Email:         user.Email,
-		Name:          user.Name,
-		CreatedDate:   user.CreatedDate,
-		UpdatedDate:   user.UpdatedDate,
-		LastLoginDate: user.LastLoginDate,
-		Status:        user.Status,
-	}, nil
+	return ToListOneOutput(user), nil
 }
 
 func (uc *ListUseCase) GetAll() ([]*userio.ListOneOutput, error) {
@@ -39,18 +31,5 @@ func (uc *ListUseCase) GetAll() ([]*userio.ListOneOutput, error) {
 		return nil, err
 	}
 
-	var result []*userio.ListOneOutput
-	for _, user := range users {
-		result = append(result, &userio.ListOneOutput{
-			ID:            user.ID,
-			Email:         user.Email,
-			Name:          user.Name,
-			CreatedDate:   user.CreatedDate,
-			UpdatedDate:   user.UpdatedDate,
-			LastLoginDate: user.LastLoginDate,
-			Status:        user.Status,
-		})
-	}
-
-	return result, nil
+	return ToListOneOutputList(users), nil
 }
