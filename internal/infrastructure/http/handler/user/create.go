@@ -19,7 +19,7 @@ func NewHandler(usecase *userusecase.CreateUseCase) *CreateHandler {
 }
 
 func (h *CreateHandler) Create(c *gin.Context) {
-	var req userdto.CreateRequest
+	var req userdto.RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -32,7 +32,7 @@ func (h *CreateHandler) Create(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, userdto.CreateResponse{
+	c.JSON(http.StatusCreated, userdto.RegisterResponse{
 		Email: user.Email,
 		Name:  user.Name,
 	})

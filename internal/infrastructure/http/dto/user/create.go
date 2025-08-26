@@ -1,12 +1,12 @@
 package userdto
 
-type CreateRequest struct {
+type RegisterRequest struct {
 	Email    string `json:"email"`
 	Name     string `json:"name"`
 	Password string `json:"password"`
 }
 
-type CreateResponse struct {
+type RegisterResponse struct {
 	Email string `json:"email"`
 	Name  string `json:"name"`
 }

@@ -5,7 +5,7 @@ import (
 	userdto "github.com/CimarRodrigo/go-inventory-api/internal/infrastructure/http/dto/user"
 )
 
-func ToCreateInput(req *userdto.CreateRequest) *userio.CreateInput {
+func ToCreateInput(req *userdto.RegisterRequest) *userio.CreateInput {
 	return &userio.CreateInput{
 		Email:    req.Email,
 		Name:     req.Name,
