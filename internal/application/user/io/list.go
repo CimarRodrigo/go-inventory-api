@@ -1,4 +1,4 @@
-package userdomain
+package userio
 
 import (
 	"time"
@@ -7,13 +7,12 @@ import (
 	"github.com/google/uuid"
 )
 
-type User struct {
+type ListOneOutput struct {
 	ID            uuid.UUID
 	Email         string
 	Name          string
-	Password      string
-	Status        shared.Status
 	CreatedDate   time.Time
 	UpdatedDate   time.Time
 	LastLoginDate time.Time
+	Status        shared.Status
 }

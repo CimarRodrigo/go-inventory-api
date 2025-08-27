@@ -1,0 +1,75 @@
+package usergorm
+
+import (
+	"errors"
+
+	userdomain "github.com/CimarRodrigo/go-inventory-api/internal/domain/user"
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
+
+type Repository struct {
+	db *gorm.DB
+}
+
+func NewRepository(db *gorm.DB) *Repository {
+	return &Repository{
+		db: db,
+	}
+}
+
+func (repo *Repository) Create(user *userdomain.User) (*userdomain.User, error) {
+
+	var newUser = FromDomain(user)
+
+	if err := repo.db.Create(newUser).Error; err != nil {
+		return nil, err
+	}
+	return ToDomain(newUser), nil
+}
+
+func (repo *Repository) GetByID(id uuid.UUID) (*userdomain.User, error) {
+	var user User
+	if err := repo.db.First(&user, id).Error; err != nil {
+		return nil, err
+	}
+	return ToDomain(&user), nil
+}
+
+func (repo *Repository) GetAll() ([]*userdomain.User, error) {
+	var users []User
+	if err := repo.db.Find(&users).Error; err != nil {
+		return nil, err
+	}
+	return ToDomainList(users), nil
+}
+
+func (repo *Repository) Update(user *userdomain.User, id uuid.UUID) error {
+	var existingUser User
+	if err := repo.db.First(&existingUser, id).Error; err != nil {
+		return errors.New("user not found")
+	}
+
+	if user.Password != "" {
+		existingUser.Password = user.Password
+	}
+
+	if user.Email != "" {
+		existingUser.Email = user.Email
+	}
+
+	if user.Name != "" {
+		existingUser.Name = user.Name
+	}
+
+	return repo.db.Save(&existingUser).Error
+}
+
+func (repo *Repository) Delete(id uuid.UUID) error {
+	var user User
+	if err := repo.db.First(&user, id).Error; err != nil {
+		return errors.New("user not found")
+	}
+
+	return repo.db.Delete(&user).Error
+}
